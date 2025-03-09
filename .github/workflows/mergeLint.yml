@@ -1,18 +1,14 @@
 name: Fix Code Style
 
-on:
-  pull_request:
-    branches:
-      - main # Sesuaikan dengan branch utama Anda
-    types: [opened, synchronize, reopened] # Jalankan saat PR dibuka, diperbarui, atau dibuka kembali
+on: [pull_request]
 
 jobs:
   lint:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     strategy:
       fail-fast: true
       matrix:
-        php: [8.4] # Sesuaikan dengan versi PHP yang digunakan
+        php: [8.2]
 
     steps:
       - name: Checkout code
@@ -25,9 +21,6 @@ jobs:
           extensions: json, dom, curl, libxml, mbstring
           coverage: none
 
-      - name: Install Composer dependencies
-        run: composer install --prefer-dist --no-progress --no-suggest
-
       - name: Install Pint
         run: composer global require laravel/pint
 
@@ -36,6 +29,3 @@ jobs:
 
       - name: Commit linted files
         uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "Apply Pint fixes" # Pesan commit untuk perubahan yang dibuat oleh Pint
-          branch: ${{ github.head_ref }} # Commit ke branch yang sama dengan pull request
